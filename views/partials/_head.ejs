@@ -1,0 +1,29 @@
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="<%= description %>">
+    <link rel="shortcut icon" href="/images/favicon.png" type="images/png">
+    <title>
+        <%= title %>
+    </title>
+    <style>
+        * {
+            transition: all 200ms ease-in-out !important;
+        }
+    </style>
+    <% if (includeCSS.includeFlightBookCSS) { %>
+        <link rel="stylesheet" href="/styles/flight-book.css" />
+        <% } else if (includeCSS.includeContactCSS) { %>
+            <link rel="stylesheet" href="/styles/contact.css">
+            <% } else if (includeCSS.includeSignInCSS) { %>
+                <link rel="stylesheet" href="/styles/logIn.css">
+                <% } else if (includeCSS.includeSignUpCSS) { %>
+                    <link rel="stylesheet" href="/styles/signup.css">
+                    <% } else if (includeCSS.includeAdminCSS) { %>
+                        <link rel="stylesheet" href="/styles/admin.css">
+                        <% } else { %>
+                            <link rel="stylesheet" href="/styles/index.css" />
+                            <% } %>
+
+</head>

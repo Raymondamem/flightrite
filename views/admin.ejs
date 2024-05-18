@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- <%- include('partials/_head', { title, description, includeCSS }); %> -->
+<head>
+    <link rel="stylesheet" href="/styles/admin.css">
+    <title>admin</title>
+</head>
+
+    <body>
+        <div class="mainContainer">
+            <!-- header -->
+            <%- include('partials/_nav'); %>
+
+                <div class="subContainer">
+                    <h1 class="heading1"> search flights</h1>
+
+                    <div class="departure">
+                        <div class="destination1">
+                            <h2>Flying from</h2>
+                            <input type="text" placeholder="City or Airport">
+                        </div>
+                        <div class="destination2">
+                            <h2>Flying to</h2>
+                            <input type="text" placeholder="City or Airport">
+                        </div>
+
+                    </div>
+
+                    <div class="timeContainer">
+                        <div class="timer">
+                            <h2>departing</h2>
+                            <input type="date" name="date" id="datetime">
+                        </div>
+                        <div class="timer">
+                            <h2>returning</h2>
+                            <input type="date" name="date" id="datetime2">
+                        </div>
+                        <div class="timer">
+                            <h2>adult(18+)</h2>
+                            <input type="number" name="options" id="option1">
+                        </div>
+                        <div class="timer">
+                            <h2>children(0-17)acacsacascscsasccssdsad</h2>
+                            <input type="number" name="options" id="option2">
+                        </div>
+                    </div>
+                    <div class="sub"><input type="submit" value="Submit"></div>
+                </div>
+        </div>
+    </body>
+
+</html>

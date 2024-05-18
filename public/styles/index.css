@@ -1,0 +1,319 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+}
+.bg_video {
+    background: #000;
+    position: absolute;
+    inset: 0;
+    /* overflow: hidden; */
+}
+
+.video {
+    position: fixed;
+    width: 100vw;
+    left: -10rem;
+    right: -10rem;
+    top: -20;
+
+    /* background-position-x: -4rem; */
+}
+.video_overley {
+    background: #000;
+    position: absolute;
+    inset: 0;
+    bottom: -30vh;
+    opacity: -0.9;
+}
+
+.mainContainer {
+    /* background:rgba(0, 0, 0, 0.905); */
+    width: 95%;
+    margin: auto;
+    position: absolute;
+    inset: 0;
+    /* background:#0000000e; */
+    /* height:1000vh; */
+}
+
+/* navigation styling */
+
+.nasBar {
+    font-size: 1.2rem;
+    text-transform: capitalize;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    /* background: #000000dd; */
+    /* background: #f4f4f4; */
+    background: #000000dc;
+}
+
+#logo {
+    padding: 3px;
+    border-style: outset;
+    margin-right: 2rem;
+    color: #f4f4f4;
+}
+
+.nasBar a {
+    text-decoration: none;
+    color: #f4f4f4;
+}
+
+a {
+    transition: all 0.3s;
+}
+
+a:hover {
+    border-bottom: 3.5px solid orange;
+    border-radius: 20%;
+    border-width: 0.3rem;
+    padding-top: 3px;
+}
+
+.flightDestination {
+    width: 95%;
+    display: flex;
+    flex-direction: row;
+    align-self: center;
+    background: #f4f4f4;
+    height: fit-content;
+    margin: auto;
+    margin-top: 10rem;
+    border-radius: 10px;
+}
+
+.flightDestination > div {
+    width: calc(100% / 6);
+    border-left: 1px solid black;
+}
+
+.flightDestination > div > input,
+.flightDestination > div > button {
+    padding: 1.5rem 0;
+    text-indent: 0.5rem;
+    display: block;
+    width: 100%;
+}
+
+.selectBar > select {
+    width: 10rem;
+    height: 2rem;
+    padding: 0 1.5rem;
+    border: 0 solid #f4f4f4 transparent;
+    border-style: hidden;
+}
+.selectBar {
+    /* justify-content: center; */
+    margin: auto;
+    text-transform: capitalize;
+}
+.sub input {
+    margin-top: 2.6rem;
+    background: orange;
+    height: 3rem;
+    color: #000;
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: center;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+input {
+    width: 10rem;
+    height: 2rem;
+    padding: 0 1.5rem;
+    border: 1px solid #f4f4f4 transparent;
+    border-style: hidden;
+    text-transform: capitalize;
+    text-align: center;
+}
+
+h4 {
+    font-size: 1rem;
+    text-transform: capitalize;
+}
+
+h1 {
+    margin-top: 10rem;
+    font-weight: bolder;
+    text-align: center;
+    text-transform: capitalize;
+    color: #f4f4f4;
+}
+
+.heading1 {
+    color: orange;
+    display: block;
+    font-size: 3rem;
+}
+#para1 {
+    font-size: 1rem;
+    color: #f4f4f4;
+    text-align: center;
+    text-transform: capitalize;
+    padding-bottom: 0.5rem;
+    border-bottom: 0.3rem solid orange;
+}
+.offers {
+    color: #f4f4f4;
+    margin-top: 3rem;
+    border-radius: 10px;
+    width: 60%;
+}
+h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    text-transform: capitalize;
+    margin: 1rem;
+    padding-top: 2rem;
+}
+p {
+    text-align: center;
+    font-size: 16px;
+}
+h3 {
+    text-align: center;
+    margin: 1rem;
+    text-transform: capitalize;
+    font-size: 18px;
+    text-decoration: underline orange solid 0.2rem;
+}
+h4 {
+    text-align: center;
+    margin: 0.4rem;
+    text-transform: capitalize;
+    font-size: 18px;
+}
+.offerContainer {
+    display: flex;
+    justify-content: space-between;
+    background: #000000dc;
+    margin-top: 8rem;
+    border-radius: 10px;
+}
+
+.freeQuote {
+    background: #f4f4f4;
+    width: 40%;
+    border-radius: 10px;
+}
+.special {
+    color: orange;
+    font-size: 1.4rem;
+    margin-top: 0.5rem;
+    text-align: center;
+    text-transform: capitalize;
+}
+h5 {
+    font-size: 15px;
+    text-transform: capitalize;
+    font-weight: lighter;
+}
+.form {
+    display: flex;
+    justify-content: space-between;
+    margin: 0.5rem;
+}
+.right h5,
+.left h5 {
+    display: block;
+    border: 0.2px solid #00000051;
+}
+.right input,
+.left input {
+    width: 100%;
+}
+.track {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+#btn input {
+    width: 90%;
+    background: orange;
+    padding: 0.5rem;
+    margin: 2rem;
+    text-align: center;
+    border-radius: 20px;
+    transition: 1s ease-in-out;
+}
+
+#btn input:hover {
+    background: #000000dc;
+    color: #f4f4f4;
+}
+
+/* styling price container */
+.priceContainer {
+    width: 98%;
+    margin: auto;
+    display: flex;
+    justify-content: space-evenly;
+    height: 20%;
+    margin-top: 2rem;
+    /* grid-row: 1fr 1fr 1fr ;
+    grid-column: 1fr 1fr 1fr; */
+}
+.price {
+    border: 3px solid white;
+    padding: 2rem;
+    width: 18rem;
+    background: #000000dc;
+    border-radius: 10px;
+    height: 20%;
+}
+img {
+    padding: 2rem;
+    width: 18rem;
+    background: #000000dc;
+    border-radius: 10px;
+}
+#para2 {
+    width: 70%;
+    text-align: center;
+    margin: auto;
+}
+.PricesWrapper {
+    margin-top: 8rem;
+}
+
+.flights {
+    background: #f4f4f4;
+    text-align: center;
+    margin-top: 8rem;
+    border-radius: 10px;
+}
+/* 
+table > th td{
+
+    border: 2px solid orange;
+} */
+
+table {
+    width: 90%;
+    padding: 4rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding-bottom: 2rem;
+    border-collapse: collapse;
+    margin-top: 0.5rem;
+}
+th {
+    padding-bottom: 1.5rem;
+    border: 1px solid #000000dc;
+    text-transform: capitalize;
+}
+td {
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #0000001f;
+    border-left: 1px solid #0000001f;
+    border-right: 1px solid #0000001f;
+}

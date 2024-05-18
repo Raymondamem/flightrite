@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('partials/_head', { title, description, includeCSS }); %>
+
+    <body>
+        <!-- header -->
+        <%- include('partials/_nav'); %>
+            <div class="mainContainer">
+                <div class="contactContainer">
+                    <h2 class="heading1"> get in touch </h2>
+
+                    <p> Having extraordinary exprerence- Get in touch </p>
+                    <div class="contactWrapper">
+                        <div class="name">
+                            <h3>name</h3>
+                            <input type="text" placeholder="please, Enter your name" required>
+                        </div>
+                        <div class="email">
+                            <h3>email</h3>
+                            <input type="email" name="email" id="email" placeholder="please, enter your Email address"
+                                required>
+                        </div>
+                        <div class="message">
+                            <h3>message</h3>
+                            <textarea placeholder="  please, drop your message"></textarea>
+                        </div>
+                        <div class="btn"><input type="button" value="send"></div>
+
+                    </div>
+
+
+
+
+
+                </div>
+            </div>
+    </body>
+
+</html>

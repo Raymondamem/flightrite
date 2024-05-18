@@ -1,0 +1,86 @@
+ * {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+html,
+body {
+    width: 100%;
+}
+
+body {
+    position: relative;
+    
+} 
+.summaryContainer{
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    background:rgba(9, 69, 233, 0.797);
+
+    display:none;
+}
+.active{
+    display: block;
+}
+#headingSum{
+    color: #f4f4f4;
+    width: 50%;
+    position: absolute;
+    top: 20%;
+    transform: translateX(50%) translateY(50%);
+    border-bottom: none;
+    font-size: 2rem;
+    
+}
+
+.sumBg{
+    width: 70%;
+    height: 70%;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    background:rgba(6, 74, 247, 0.966);
+    border: #c4c4c4 .2rem solid;
+    margin-top: 8rem;
+    border-radius: 10px;
+    /* display: none; */
+} 
+.sumImg{
+    width: 60%;
+    height: 100%;
+    margin-top: 8rem;
+}
+.sumImg img{
+    width: 100%;
+    height: 80%;
+    
+}
+.sumAction{
+    margin-top: 8rem;
+    width: 40%;
+    
+}
+
+h5{
+    
+    color: #c4c4c4;
+    text-align: left;
+    text-transform: capitalize;
+    font-size: 1rem;
+    margin: .5rem 0;
+  
+}
+#cancel{
+    position: absolute;
+     top: 16%;
+     left: 15%;
+    color: red;
+    padding: 1rem;
+    font-weight: bolder;
+    cursor: pointer;
+}
+

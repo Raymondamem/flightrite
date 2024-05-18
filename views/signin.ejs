@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('partials/_head', { title, description, includeCSS }); %>
+
+    <body>
+        <!-- header -->
+        <%- include('partials/_nav'); %>
+
+            <div class="mainContainer">
+                <% if (isAdmin) { %>
+                    <p style="position: fixed; top:5rem; left:3rem; z-index:20;">Admin signin <a href="/api/signin">Switch Sides 😒</a></p>
+                    <% } else { %>
+                        <p style="position: fixed; top:5rem; left:3rem; z-index:20;">User signin <a href="/api/admin/signin">Switch Sides 😒</a></p>
+                        <% } %>
+                            <div class="logInWrapper">
+                                <div class="right">
+                                    <img src="/media/signup.webp" alt="">
+                                </div>
+                                <form method="post" action="<%= isAdmin? '/api/admin/signin' : '/api/signin' %>"
+                                    id="signup_form" class="left">
+                                    <h1 class="heading2">sign In</h1>
+                                    <p>Save your details for easy booking, and see all your trip in one place</p>
+                                    <div>
+                                        <h2>email</h2><input type="email" name="email" id="email"
+                                            placeholder="someone@gmail.com">
+                                    </div>
+                                    <div>
+                                        <h2>password</h2><input type="password" name="password" id="password"
+                                            placeholder="your password" required>
+                                    </div>
+                                    <div class="sub"><input type="submit" value="submit"></di>
+                                    <p>Don't have an account? <a
+                                            href="<%= isAdmin? '/api/admin/signup' : '/api/signup' %>"
+                                            >signup</a> here.</p>
+                                </form>
+                            </div>
+            </div>
+            <!-- <script src="/js/signup.js"></script> -->
+    </body>
+
+</html>

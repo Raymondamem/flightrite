@@ -1,0 +1,399 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+}
+.mainContainer {
+    /* background:rgba(0, 0, 0, 0.905); */
+    width: 100%;
+    background: url(../styles/plan\ 1.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    min-height: 100vh;
+    overflow: hidden;
+    position: relative;
+    z-index: 2;
+    padding-top: 5rem;
+}
+
+.nasBar {
+    font-size: 1.2rem;
+    text-transform: capitalize;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 1rem;
+    position: fixed;
+    top: 0 !important;
+    z-index: 5;
+    /* background: #000000dd; */
+    /* background: #f4f4f4; */
+    background: #000000dc;
+}
+
+#logo {
+    background: rgba(50, 6, 247, 0.966);
+    padding: 3px;
+    border-style: outset;
+    margin-right: 2rem;
+    color: #f4f4f4;
+}
+
+.nasBar a {
+    text-decoration: none;
+    color: #f4f4f4;
+}
+a {
+    transition: all 0.3s;
+}
+a:hover {
+    border-bottom: 3.5px solid rgba(6, 74, 247, 0.966);
+    border-radius: 20%;
+    border-width: 0.3rem;
+    padding-top: 3px;
+}
+
+/* bookflight styling */
+
+.subContainer,
+.available_flights {
+    width: 100%;
+    height: fit-content;
+    margin: 1rem auto 0 0;
+    position: relative;
+}
+
+.available_flights {
+    height: 50vh;
+    overflow-y: auto;
+    /* height: fit-content; */
+}
+
+.available_flights h1 {
+    position: sticky;
+    top: 0;
+    left: 0;
+    z-index: 5;
+    background: white;
+}
+
+.subContainer .parentWrapper,
+.available_flights .parentWrapper {
+    width: 100%;
+    height: fit-content;
+    margin: auto;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    gap: 0.2rem;
+}
+
+.subContainer .parentWrapper {
+    flex-wrap: wrap;
+}
+
+.subContainer .parentWrapper > *,
+.available_flights .parentWrapper > * {
+    display: block;
+    width: calc((100% / 5) - 0.2rem);
+    padding: 0.5rem;
+    background-color: rgba(6, 74, 247, 0.966);
+    border: none;
+    border-radius: 0.2rem;
+}
+
+.available_flights .parentWrapper > * {
+    margin: 0.2rem auto;
+}
+
+.subContainer .parentWrapper div > input,
+.subContainer .parentWrapper div > select,
+.available_flights .parentWrapper div > span {
+    display: block;
+    width: 100%;
+    border: none;
+    border-radius: 0.2rem;
+    padding: 0.5rem;
+}
+
+.available_flights .parentWrapper div > span {
+    background-color: rgba(146, 170, 233, 0.493);
+    color: white !important;
+}
+
+.heading1 {
+    margin: 0 auto 1rem auto;
+    background-color: transparent;
+    font-size: 2.5rem;
+    font-weight: 400;
+    text-transform: capitalize;
+    text-align: center;
+}
+
+.departure {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    position: inherit;
+    top: 19%;
+    align-items: center;
+}
+
+.destination1 {
+    width: 70%;
+    background-color: rgba(6, 74, 247, 0.966);
+    padding-left: 8rem;
+    padding-right: 2rem;
+    padding-bottom: 2rem;
+    padding-top: 2rem;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+}
+
+.destination2 {
+    width: 70%;
+    background-color: rgba(6, 74, 247, 0.966);
+    padding-right: 8rem;
+    padding-left: 2rem;
+    padding-bottom: 2rem;
+    padding-top: 2rem;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+input {
+    width: 100%;
+    margin: auto;
+    text-align: center;
+    padding: 0.4rem;
+}
+h2 {
+    text-align: center;
+    padding: 0.5rem;
+    text-transform: capitalize;
+}
+.timeContainer {
+    display: flex;
+    position: inherit;
+    top: 28%;
+    background: #f4f4f4;
+    justify-content: space-around;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    padding-bottom: 2rem;
+    padding-top: 2rem;
+    border-radius: 20px;
+}
+.sub {
+    width: 10%;
+}
+.sub > input {
+    border-radius: 1rem;
+    padding: 5px;
+    text-transform: capitalize;
+    font-size: large;
+    background-color: rgba(6, 74, 247, 0.966);
+    color: #f4f4f4;
+    border-color: #f4f4f4;
+    transition: all 0.3s;
+}
+
+.sub > input:hover {
+    background: #f4f4f4;
+    border-color: blue;
+    color: blue;
+}
+
+.booking_modele,
+.booking_modele_paystack {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 50vw;
+    height: 70vh;
+    background-color: blue;
+    color: white;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 50;
+    transform: translateX(-50%) translateY(-50%);
+    border: 5px solid white;
+    box-shadow:
+        1px 1px 20px black,
+        -1px -1px 20px black;
+    border-radius: 15px;
+}
+
+.booking_modele > .booking_btn,
+.booking_modele_paystack > .booking_btn_prev,
+.booking_modele > .booking_cls_btn,
+.booking_modele_paystack > .booking_cls_btn {
+    position: absolute;
+    top: 5%;
+    right: 5%;
+    display: block;
+    width: fit-content;
+    height: fit-content;
+    padding: 0.5rem;
+    border-radius: 0.3rem;
+    border: none;
+    background-color: white;
+    font-weight: bolder;
+    font-size: 1.3rem;
+}
+
+.booking_cls_btn {
+    left: 5%;
+    right: auto;
+}
+
+.booking_btn:hover,
+.booking_btn_prev:hover,
+.booking_cls_btn:hover {
+    background-color: blue;
+    color: white;
+    box-shadow:
+        1px 1px 20px white,
+        -1px -1px 20px white;
+}
+
+.booking_modele > .booking_modele_inner_wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.booking_modele > .booking_modele_inner_wrapper > div > label {
+    /* margin-bottom: 2rem; */
+}
+
+.booking_modele > .booking_modele_inner_wrapper > div {
+    width: 90%;
+}
+
+.booking_modele > .booking_modele_inner_wrapper > div > input,
+.booking_modele > .booking_modele_inner_wrapper > div > textarea,
+.booking_modele > .booking_modele_inner_wrapper > div > select {
+    display: block;
+    border: none;
+    border-radius: 5px;
+    margin-top: 1rem;
+}
+
+.booking_modele > .booking_modele_inner_wrapper > div > select {
+    padding: 0.5rem 1rem;
+    width: 100%;
+}
+
+.booking_modele_paystack form {
+    display: block;
+    width: 90%;
+}
+
+.booking_modele_paystack form * {
+    display: block;
+    width: 100%;
+}
+
+.booking_modele_paystack form div * {
+    border: none;
+    border-radius: 5px;
+    margin-top: 0.5rem;
+}
+
+.booking_modele_paystack form button {
+    padding: 0.5rem;
+    font-weight: bolder;
+    font-size: 2rem;
+    color: blue;
+}
+
+.loading_anim {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 50;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.flight_booked {
+    position: relative;
+}
+
+.flight_booked::before {
+    content: "Flight Booked";
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    background: rgba(0, 0, 0, 0.4);
+    color: white;
+    font-size: 2rem;
+    font-weight: bolder;
+    justify-content: center;
+    align-items: center;
+}
+
+.flight_booked:hover::before {
+    color: rgba(0, 0, 0, 0.2);
+}
+
+.success_error_modele {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 50;
+    background: rgba(0, 0, 0, 0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.success_error_modele > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    width: 90%;
+    height: -moz-fit-content;
+    height: fit-content;
+    padding: 1.5rem 1rem;
+    border: none;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+}
+
+.success_error_modele > div > span {
+    display: block;
+    padding: 1rem 0;
+    border: 2px solid brown;
+    border-radius: 15px;
+    margin: 0.2rem 0;
+    width: 80%;
+    font-size: 1.2rem;
+    color: brown;
+    padding: 1rem;
+}
+
+.success_error_modele.active {
+    display: flex;
+}
+
+.active {
+    display: flex;
+    transition: all 300ms ease-in-out !important;
+}
+
+.notActive {
+    display: none;
+}

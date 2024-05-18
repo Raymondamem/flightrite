@@ -1,0 +1,126 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+html,
+body {
+    width: 100%;
+}
+
+body {
+    position: relative;
+}
+.containerModules{
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    /* background:#030303fa; */
+    background: rgba(9, 69, 233, 0.797);
+    display:none;
+}
+
+.active {
+    display: block;
+}
+
+
+.checkbox {
+    display: flex;
+    flex-direction: row;
+}
+.close {
+    color: red;
+    width: 2rem;
+    font-weight: bolder;
+    padding: 1rem;
+}
+
+
+
+
+.modulesWeapper{
+    position: sticky;
+    top: 20rem;
+    margin: auto;
+    width: 40%;
+    height: 50%;
+    background: rgba(6, 74, 247, 0.966);
+    border:  #c4c4c4 .2rem solid;
+    /* margin-top: 8rem; */
+    height: 81%;
+    border-radius: 10px;
+
+
+ }
+
+
+ 
+ .heading1{
+    margin: auto;
+    color:#f4f4f4;
+    font-size: 4rem;
+    font-weight: 400;
+    text-transform: capitalize;
+    text-align: center;
+ 
+    }
+    /* .contactContainer > p{
+        text-align: center;
+        font-size: 2rem;
+        margin-top: 3rem;
+
+    } */
+    h2{
+        text-transform: capitalize;
+        color: #c4c4c4;
+        padding: 1rem;
+        font-weight: lighter;
+        font-size: 1.2rem;
+    
+    }
+    .paymentOption{
+        margin: auto;
+        width: 80%;
+        margin-top: .8rem;
+        font-size: 1rem;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        font-weight: lighter;
+        color: #c4c4c4;
+    }
+     div> input{
+        width: 70%;
+        display: block;
+        margin: auto;
+        padding: .5rem;
+        border-color:#f4f4f4;
+        border-style:transparent;
+        border-radius: 10px;
+        text-align: center;
+        text-transform: capitalize;
+        margin-top: .5rem;
+    }
+    
+    
+    .btn>input{
+        border-radius: 1rem;
+        width: 6rem;
+            padding: 5px;
+        text-transform: capitalize;
+        font-size: large;
+        background-color:rgba(6, 74, 247, 0.966); ;
+        color:#f4f4f4;
+        border-color: #f4f4f4;
+        transition: all 0.3s;
+        text-align: center;
+        }
+        
+        .btn>input:hover{
+          background: #f4f4f4;
+          border-color: blue;
+          color: blue;
+        }

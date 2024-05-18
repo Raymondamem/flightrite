@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('partials/_head', { title, description, includeCSS }); %>
+
+  <body>
+    <!-- header -->
+    <%- include('partials/_nav'); %>
+
+      <!-- main container -->
+      <div class="bg_video">
+        <div class="video"> <video src="/media/Intro video for travel No Copyright video.mp4" autoplay="true"
+            muted="true" loop="true" width="2100" height="1100"></video></div>
+        <!-- <div class="video"> <video src="../asset/styles/pictures/video_preview_h264.mp4"  autoplay="true" muted="true" loop="true" width="2100" height="1100" ></video></div> -->
+      </div>
+      <div class="video_overley"></div>
+
+      <div class="mainContainer">
+        <div>
+          <h1>fly high ! <span class="heading1">Above the sky</span></h1>
+          <p id="para1"> <span>flightrite </span>is cheap, comfort & secure your way ***</p>
+
+          <h6 class="heading1" style="display: block; text-align: center;">Search for available flights.</h6>
+          <div class="flightDestination">
+            <div>
+              <input type="text" name="flight_name" placeholder="flight name">
+            </div>
+
+            <div>
+              <input type="text" name="depart_from" placeholder="departure from">
+            </div>
+
+            <div>
+              <input type="text" name="arrive_at" placeholder="arrive at">
+            </div>
+
+            <div>
+              <input type="datetime-local" name="takeoff_time" placeholder="pick takeoff time">
+            </div>
+
+            <div>
+              <input type="datetime-local" name="landing_time" placeholder="pick landing time">
+            </div>
+            <div>
+              <button class="search_flights">Search</button>
+            </div>
+          </div>
+        </div>
+        <!-- display search results -->
+        <div class="search_results">
+        </div>
+        <!-- pls do not put any element after script tag 😂 -->
+        <script src="../asset/js/index.js"></script>
+  </body>
+
+</html>

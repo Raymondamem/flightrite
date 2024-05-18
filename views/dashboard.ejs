@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- <%- include('partials/_head', { title, description, includeCSS }); %> -->
+
+<head>
+    <link rel="stylesheet" href="/styles/admin.css">
+    <% if (isAdmin) { %>
+        <title>Admin Dashboard</title>
+        <% } else { %>
+            <title>User Dashboard</title>
+            <% } %>
+</head>
+
+<body>
+    <div class="mainContainer">
+        <!-- header -->
+        <%- include('partials/_nav'); %>
+            <% if (isAdmin) { %>
+                <p>Admin signed In</p>
+                <% } else { %>
+                    <p>User signed In</p>
+                    <% } %>
+                        <h1>Welcome <span><%- user.userfirst_name %></span>
+                            <span><%- user.userlast_name %></span> with email: <span><%- user.useremail %></span>
+                        </h1>
+                        <form action="<%= isAdmin? '/api/admin/signout' : '/api/signout' %>" method="post">
+                            <input type="submit" value="Signout">
+                        </form>
+                        <form method="<%= isAdmin? 'post' : '' %>"
+                            action="<%= isAdmin? '/api/admin/add-flights' : '' %>" class="subContainer">
+                            <% if (isAdmin) { %>
+                                <h1 class="heading1"> Add flights</h1>
+                                <% } else { %>
+                                    <h1 class="heading1"> search flights</h1>
+                                    <% } %>
+                                        <div class="parentWrapper">
+                                            <% if (isAdmin) { %>
+                                                <div>
+                                                    <input type="text" name="flight_name" placeholder="flight name">
+                                                </div>
+                                                <% } %>
+
+                                                    <div>
+                                                        <input type="text" name="depart_from"
+                                                            placeholder="departure from">
+                                                    </div>
+
+                                                    <div>
+                                                        <input type="text" name="arrive_at" placeholder="arrive at">
+                                                    </div>
+                                                    <% if (isAdmin) { %>
+                                                        <div>
+                                                            <input type="datetime-local" name="takeoff_time"
+                                                                placeholder="pick takeoff time">
+                                                        </div>
+
+                                                        <div>
+                                                            <input type="datetime-local" name="landing_time"
+                                                                placeholder="pick landing time">
+                                                        </div>
+
+                                                        <div>
+                                                            <input type="number" name="price"
+                                                                placeholder="price (base)">
+                                                        </div>
+
+                                                        <div>
+                                                            <input type="number" name="no_seats"
+                                                                placeholder="number of seats">
+                                                        </div>
+                                                        <% } %>
+                                        </div>
+                                        <div class="<%= isAdmin? 'sub' : 'notActive' %>"><input type="submit"
+                                                value="Submit"></div>
+                        </form>
+
+                        <section class="available_flights">
+                            <h1 style="text-align: center; margin-bottom: 1rem;">
+                                <%= isAdmin? 'Availabel Flights added' : 'Availabel Flights to Book' %>
+                            </h1>
+                            <!-- ///////////////////////////////////////////// -->
+                            <% if(availableFlights !="" ) { %>
+                                <% availableFlights.forEach((item)=> { %>
+                                    <div class="<%= (item.last_assigned_seats !== 0 && isAdmin) ? 'parentWrapper flight_booked' : 'parentWrapper' %>"
+                                        data-flightld="<%= item.id? item.id : 0 %>"
+                                        data-userid="<%= user.userid? user.userid : 0 %>"
+                                        data-useremail="<%= user.useremail %>"
+                                        data-userfirstname="<%= user.userfirst_name %>"
+                                        data-userlastname="<%= user.userlast_name %>" data-price="<%= item.price %>"
+                                        data-availableseats="<%= item.available_seats %>">
+                                        <div>
+                                            <span style="margin-bottom: .5rem;">
+                                                <%- item.flight_name %>
+                                            </span>
+                                            <span>
+                                                Availabele Seats: <%- item.available_seats %>
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <span>
+                                                <%- item.depart_from %>
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <span>
+                                                <%- item.arrive_at %>
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <span>
+                                                <%- item.takeoff_time %>
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <span>
+                                                <%- item.landing_time %>
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <span style="margin-bottom: .5rem;">
+                                                First Class:
+                                                ₦<span>
+                                                    <%- item.price * 3 %>
+                                                </span>
+                                            </span>
+                                            <span style="margin-bottom: .5rem;">
+                                                Economy:
+                                                ₦<span>
+                                                    <%- item.price * 2 %>
+                                                </span>
+                                            </span>
+                                            <span>
+                                                Business:
+                                                ₦<span>
+                                                    <%- item.price %>
+                                                </span>
+                                            </span>
+                                        </div>
+
+                                        <button class="delete-btn" style="<%= isAdmin? 'color: white; font-size: 2rem; font-weight:bolder; background: red;' : 
+                                            'color: white; font-size: 2rem; font-weight:bolder; background: green;' %>"
+                                            data-ischeck="<%= isAdmin? 'admin' : 'user' %>">
+                                            <%= isAdmin? 'Delete Flight' : 'Book Flight' %>
+                                        </button>
+                                    </div>
+                                    <% }); %>
+                                        <% } %>
+                                            <!-- ///////////////////////////////////////////// -->
+                        </section>
+    </div>
+
+    <!-- user booking modele -->
+    <div class="<%= isAdmin? 'notActive' : 'booking_modele' %>">
+        <button class="booking_cls_btn">Close</button>
+        <button class="booking_btn">next</button>
+        <h2>Booking cretarials</h2>
+        <div class="booking_modele_inner_wrapper">
+            <div>
+                <label for="passenger_count">passengers count</label>
+                <input type="number" id="passenger_count" placeholder="passengers count">
+            </div>
+            <div>
+                <label for="flight_class">Select Flight CLass</label>
+                <select name="flight_class" id="flight_class">
+                    <option value="">Select Flight CLass</option>
+                    <option value="A">First Class</option>
+                    <option value="B">Economy</option>
+                    <option value="C">Business</option>
+                </select>
+            </div>
+            <div>
+                <label for="flight_note">Note</label>
+                <textarea name="" id="flight_note" placeholder="Enter Flight Note" cols="30" rows="10"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- user paystack payment model -->
+    <div class="<%= isAdmin? 'notActive' : 'booking_modele_paystack' %>">
+        <button class="booking_cls_btn">Close</button>
+        <button class="booking_btn_prev">Prev</button>
+        <h2>Paystack Booking payment</h2>
+        <form id="paymentForm">
+            <div class="form-group">
+                <label for="pay_email">Email Address</label>
+                <input type="email" id="pay_email" value="<%= user.useremail %>" required />
+            </div>
+            <div class="form-group">
+                <label for="pay_amount">Amount</label>
+                <input type="tel" id="pay_amount" required />
+            </div>
+            <div class="form-group">
+                <label for="pay_firstname">First Name</label>
+                <input type="text" id="pay_firstname" value="<%= user.userfirst_name %>" />
+            </div>
+            <div class="form-group">
+                <label for="pay_lastname">Last Name</label>
+                <input type="text" id="pay_lastname" value="<%= user.userlast_name %>" />
+            </div>
+            <div class="pay_formsubmit">
+                <button type="submit">Processed Payment</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="loading_anim">
+        <img src="/media/loader.svg" style="display: block;" alt="loader">
+    </div>
+
+    <div class="success_error_modele">
+        <div>
+            <span>
+                <!-- message -->
+            </span>
+        </div>
+    </div>
+
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+    <script src="/js/adminDashboard.js" type="module"></script>
+</body>
+
+</html>
