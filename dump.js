@@ -906,3 +906,98 @@ module.exports = router;
         <option value="Economy">Economy</option>
     </select>
 </div>
+
+<head>
+    <link rel="stylesheet" href="/styles/admin.css">
+    <% if (isAdmin) { %>
+        <title>Admin Dashboard</title>
+        <% } else { %>
+            <title>User Dashboard</title>
+            <% } %>
+</head>
+
+<!-- < div class="parentWrapper" >
+                    <div>
+                        <span style="margin-bottom: .5rem;">
+                            Flight Name:
+                        </span>
+                        <span>
+                            Flight Class:
+                        </span>
+                    </div>
+                    <div>
+                        <span style="margin-bottom: .5rem;">
+                            Booked Date:
+                        </span>
+                        <span>
+                            Booked ID:
+                        </span>
+                    </div>
+                    <div>
+                        <span style="margin-bottom: .5rem;">
+                            Booked Amount:
+                        </span>
+                        <span>
+                            Booked persons:
+                        </span>
+                    </div>
+                    <div>
+                        <span style="margin-bottom: .5rem;">
+                            Seats-NO(s):
+                        </span>
+                        <span>
+                            Seats-NO(s):
+                        </span>
+                    </div>
+                    <div>
+                        <span style="margin-bottom: .5rem;">
+                            depart.from:
+                        </span>
+                        <span>
+                            arrive.at:
+                        </span>
+                    </div>
+                    <div>
+                        <span style="margin-bottom: .5rem;">
+                            Takeoff time:
+                            <span>
+                                00:00:00
+                            </span>
+                        </span>
+                        <span style="margin-bottom: .5rem;">
+                            Landing time:
+                            <span>
+                            00:00:00
+                            </span>
+                        </span>
+                        <span>
+                            total no seat:
+                            <span>
+                            10
+                            </span>
+                        </span>
+                    </div>
+                </div > -->
+
+    style="<%= isAdmin? 'display: none !important;':'display: block !important;' %>"
+
+
+{/* good time functions */ }
+// const getDateTime = (isoString) => {
+//   const date = new Date(isoString);
+//   const time = date.toLocaleTimeString('en-US', { hour12: false });
+//   return time;
+// }
+
+const getDateTime = (isoString) => {
+    const date = new Date(isoString);
+    const year = date.getUTCFullYear();
+    const month = (date.getUTCMonth() + 1).toString().padStart(2, '0'); // getUTCMonth() returns 0-based month
+    const day = date.getUTCDate().toString().padStart(2, '0');
+    const hours = date.getUTCHours().toString().padStart(2, '0');
+    const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+    const seconds = date.getUTCSeconds().toString().padStart(2, '0');
+    const formattedDate = `${year}-${month}-${day}`;
+    const formattedTime = `${hours}:${minutes}:${seconds}`;
+    return `${formattedDate} ${formattedTime}`;
+};

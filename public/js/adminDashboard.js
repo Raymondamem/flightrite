@@ -7,7 +7,86 @@ const booking_modele_paystack_btn = document.querySelector('#paymentForm');
 const loadingAnimation = document.querySelector('.loading_anim');
 const booking_cls_btn = document.querySelectorAll('.booking_cls_btn');
 const success_error_modele = document.querySelector('.success_error_modele');
+const bookedFlightsId_El = document.querySelector('#bookedFlightsId');
+const inner_booked_wrapper_El = document.querySelector('#bookedFlightsId > .inner_booked_wrapper');
+const bookedFlightsId_close_btn_El = document.querySelector('#bookedFlightsId > button');
 const bookingCretarials = {}
+let data = null;
+let domArr = []
+let isAdminCheck = false;
+
+// {
+//   0:
+// booked_class:"A"
+// booking_date:"2024-05-29T09:31:45.000Z"
+// booking_id:11
+// booking_notes:"[\"will of time\",\"Approved\"]"
+// booking_reference:"469728137"
+// booking_status:"Booked"
+// flight_id:6
+// flightinfo:
+// arrive_at:"Jos"
+// available_seats:2
+// depart_from:"Benue"
+// flight_name:"C34534"
+// id:6
+// landing_time:"2024-05-19T13:16:00.000Z"
+// last_assigned_seats:7
+// no_seats:9
+// price:1000
+// takeoff_time:"2024-05-29T09:31:45.000Z"
+// [[Prototype]]:Object
+// paid_price:"300000.00"
+// passenger_count:1
+// pending_payment:0
+// seat_numbers:"[7]"
+// user_id:3
+// }
+// see booked flights for perticuler person
+document.querySelector('#seeBookedFlightsBtn').addEventListener('click', async function (e) {
+  const userid = e.target.dataset.userid;
+
+  if (userid !== 'admin') {
+    isAdminCheck = false;
+    const response = await fetch(`/api/dashboard/get-booked-flights/${userid}`);
+    data = await response.json();
+  } else {
+    console.log("admin getting st!!!");
+    isAdminCheck = true;
+    const response = await fetch(`/api/admin/dashboard/get-all-booked-flights`);
+    data = await response.json();
+  }
+  console.log(data.booked_flights);
+  // //////////////
+  data.booked_flights.forEach(flightsBooked => {
+    domArr.push(computed_booked_flights(flightsBooked, isAdminCheck ? true : false));
+  })
+  // display it
+  inner_booked_wrapper_El.innerHTML = domArr;
+  data = null;
+  domArr = [];
+  bookedFlightsId_El.classList.add("activeBlock");
+});
+
+document.querySelector('#adminGetAllUnBookedFlights').addEventListener('click', async function (e) {
+  isAdminCheck = true;
+  const response = await fetch(`/api/admin/dashboard/get-all-unbooked-flights`);
+  data = await response.json();
+  console.log(data.booked_flights);
+  // //////////////
+  data.booked_flights.forEach(flightsBooked => {
+    domArr.push(computed_booked_flights(flightsBooked, isAdminCheck ? true : false));
+  });
+  // display it
+  inner_booked_wrapper_El.innerHTML = domArr;
+  data = null;
+  domArr = [];
+  bookedFlightsId_El.classList.add("activeBlock");
+});
+
+document.querySelector('#bookedFlightsId > button').addEventListener('click', function () {
+  bookedFlightsId_El.classList.remove("activeBlock");
+});
 
 async function deleteFlight_bookFlight(e) {
   if (e.target.classList.contains('delete-btn') && e.target.dataset.ischeck === 'admin') {
@@ -160,5 +239,85 @@ booking_cls_btn.forEach(el => {
     booking_model.classList.remove('active');
     booking_modele_paystack.classList.remove('active');
   })
-})
+});
 
+// functions
+function computed_booked_flights(obj, isAdmin = false) {
+
+  const getDateTime = (isoString) => {
+    const date = new Date(isoString);
+    const year = date.getUTCFullYear();
+    const month = (date.getUTCMonth() + 1).toString().padStart(2, '0'); // getUTCMonth() returns 0-based month
+    const day = date.getUTCDate().toString().padStart(2, '0');
+    const hours = date.getUTCHours().toString().padStart(2, '0');
+    const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+    const seconds = date.getUTCSeconds().toString().padStart(2, '0');
+    const formattedDate = `${year}-${month}-${day}`;
+    const formattedTime = `${hours}:${minutes}:${seconds}`;
+    return `${formattedDate} ${formattedTime}`;
+  };
+
+  return (`
+<div class="${isAdmin ? "addGreenInner parentWrapper" : "parentWrapper"}">
+<div>
+    <span style="margin-bottom: .5rem;">
+        Flight Name:${obj.flightinfo.flight_name}
+    </span>
+    <span>
+        Flight Class:${obj.booked_class}
+    </span>
+</div>
+<div>
+    <span style="margin-bottom: .5rem;">
+        Booked Date:${getDateTime(obj.booking_date)}
+    </span>
+    <span>
+        Booked ID:${obj.booking_reference}
+    </span>
+</div>
+<div>
+    <span style="margin-bottom: .5rem;">
+        Booked Amount:${obj.paid_price}
+    </span>
+    <span>
+        Booked persons:${obj.passenger_count}
+    </span>
+</div>
+<div>
+    <span style="margin-bottom: .5rem;">
+        Seats-NO(s):${obj.seat_numbers}
+    </span>
+    <span>
+        Seats-NO(s):${obj.seat_numbers}
+    </span>
+</div>
+<div>
+    <span style="margin-bottom: .5rem;">
+        depart.from:${obj.flightinfo.depart_from}
+    </span>
+    <span>
+        arrive.at:${obj.flightinfo.arrive_at}
+    </span>
+</div>
+<div>
+    <span style="margin-bottom: .5rem;">
+        Takeoff time:
+        <span>
+        ${getDateTime(obj.flightinfo.takeoff_time)}
+        </span>
+        </span>
+    <span style="margin-bottom: .5rem;">
+        Landing time:
+        <span>
+        ${getDateTime(obj.flightinfo.landing_time)}
+        </span>
+    </span>
+    <span>
+        total no seat:
+        <span>
+        ${obj.flightinfo.no_seats}
+        </span>
+    </span>
+</div>
+</div>`);
+}

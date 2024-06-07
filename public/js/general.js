@@ -1,19 +1,50 @@
-// Get the current URL path
-const path = window.location.pathname;
+const searchEl = document.querySelector('#searcher');
+const inputElOne = document.querySelector('#inputsFieldOne');
+const inputElTwo = document.querySelector('#inputsFieldTwo');
+const data_arvat = document.querySelectorAll('span[data-arvat]');
+const data_depfrm = document.querySelectorAll('span[data-depfrm]');
+const err_one = document.querySelector('#err_one');
+let searchArr = [];
 
-// Remove trailing slashes and get the route
-const currentRoute = path.replace(/\/$/, '');
+inputElOne.addEventListener('input', function (e) {
+    const inputVal = e.target.value.trim().toLowerCase();
+    data_depfrm.forEach(el => {
+        const elText = el.textContent.trim().toLowerCase();
+        if (inputVal === elText) {
+            if (inputVal === elText) {
+                const result = searchArr.find(({ feild1 }) => feild1 === elText);
+                if (result) {
+                    // searchArr.push({ feild1: elText });
+                } else {
+                    searchArr.push({ feild1: elText });
+                }
+            }
+        }
+    });
+});
 
-// Find the links in the navigation bar
-const links = document.querySelectorAll('#navBar a');
-
-// Loop through each link and add/remove the 'active' class
-links.forEach(link => {
-    // Remove 'active' class from all links
-    link.classList.remove('active');
-
-    // Add 'active' class to the link with matching href
-    if (link.getAttribute('href') === currentRoute) {
-        link.classList.add('active');
+inputElTwo.addEventListener('input', function (e) {
+    if (inputElOne.value.trim() !== "") {
+        const inputVal = e.target.value.trim().toLowerCase();
+        data_arvat.forEach(el => {
+            const elText = el.textContent.trim().toLowerCase();
+            if (inputVal === elText) {
+                const result = searchArr.find(({ feild2 }) => feild2 === elText);
+                if (result) {
+                    // searchArr.push({ feild2: elText });
+                } else {
+                    searchArr.push({ feild2: elText });
+                }
+            }
+        });
+        // will filter DOM here
+        const fss = setTimeout(function () {
+            console.log(searchArr, ", final run!")
+            searchArr = [];
+            clearTimeout(fss);
+        })
+    } else {
+        err_one.innerHTML = "Empty Field!";
+        inputElTwo.value = "";
     }
 });

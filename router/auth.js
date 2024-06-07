@@ -9,6 +9,7 @@ const { ensureLoggedin, ensureAdminAuthenticated } = require('../middlewares/ens
 const { json } = require('express');
 const current_day = (date = new Date()) => `${date.getFullYear()}-${(date.getMonth() + 1) > 9 ? (date.getMonth() + 1) : `0${(date.getMonth() + 1)}`}-${(date.getDate()) > 9 ? date.getDate() : `0${date.getDate()}`}`;
 let error_arr = [];
+const util = require('util');
 
 
 const styles = {
@@ -92,17 +93,26 @@ router.get('/', (req, res) => {
     styles.includeAdminCSS = false
     styles.includeDashboardCSS = false;
 
-    const result = null;
-
-
-    res.render('index', {
-        errors: req.flash("error"),
-        success: req.flash("success"),
-        title: `Flight | Search`,
-        description: 'Search for available fight',
-        includeCSS: styles,
-        availableFlights: result ? result : {},
-    });
+    try {
+        const sql = `SELECT * FROM flights WHERE available_seats > 0 ORDER BY id DESC`;
+        connection.query(sql, (err, result) => {
+            if (err) {
+                throw err;
+            } else {
+                res.render('index', {
+                    errors: req.flash("error"),
+                    success: req.flash("success"),
+                    title: `Flight | Search`,
+                    description: 'Search for available fight',
+                    includeCSS: styles,
+                    availableFlights: result,
+                });
+            }
+        });
+    } catch (error) {
+        req.flash('error', `${error}`);
+        res.redirect('/api/admin/dashboard');
+    }
 });
 
 router.get('/book-flight', (req, res) => {
@@ -255,8 +265,8 @@ router.get('/dashboard', ensureLoggedin, (req, res) => {
     styles.includeFlightBookCSS = false;
     styles.includeSignInCSS = false;
     styles.includeSignUpCSS = false;
-    styles.includeAdminCSS = false;
-    styles.includeDashboardCSS = true;
+    styles.includeAdminCSS = true;
+    styles.includeDashboardCSS = false;
 
     try {
         const sql = `SELECT * FROM flights WHERE available_seats > 0 ORDER BY id DESC`;
@@ -286,6 +296,69 @@ router.get('/dashboard', ensureLoggedin, (req, res) => {
         res.redirect('/api/admin/dashboard');
     }
 });
+
+// router.get('/dashboard/get-booked-flights/:id', ensureLoggedin, (req, res) => {
+//     const userid = req.params.id;
+//     if (!userid) {
+//         return res.status(400).json({ message: 'Invalid User ID!' });
+//     }
+
+//     try {
+//         let arr = [];
+//         const get_booked_flights = `SELECT * FROM booking WHERE user_id = ? ORDER BY booking_id DESC`;
+//         connection.query(get_booked_flights, [userid], (err, result) => {
+//             if (err) {
+//                 return res.status(400).json({ message: `${err}` });
+//             } else {
+//                 result.forEach(res => {
+//                     const sql = `SELECT * FROM flights WHERE id = ?`;
+//                     connection.query(sql, [res.flight_id], (err, flightinfo_result) => {
+//                         if (err) {
+//                             return res.status(400).json({ message: `${err}` });
+//                         } else {
+//                             res.flightinfo = flightinfo_result;
+//                             // res.json({ message: 'User booked flight(s)', booked_flights: flightinfo_result });
+//                         }
+//                     });
+//                 })
+//                 console.log("booking: ", result);
+//                 res.json({ message: 'Available booked flights', booked_flights: result });
+//             }
+//         });
+//     } catch (error) {
+//         return res.status(400).json({ message: `${error}` });
+//     }
+// });
+
+// Convert connection.query to return a Promise
+const query = util.promisify(connection.query).bind(connection);
+
+router.get('/dashboard/get-booked-flights/:id', ensureLoggedin, async (req, res) => {
+    const userid = req.params.id;
+    if (!userid) {
+        return res.status(400).json({ message: 'Invalid User ID!' });
+    }
+
+    try {
+        const get_booked_flights = `SELECT * FROM booking WHERE user_id = ? ORDER BY booking_id DESC`;
+        const bookedFlights = await query(get_booked_flights, [userid]);
+
+        const bookedFlightsWithInfo = await Promise.all(
+            bookedFlights.map(async (booking) => {
+                console.log(booking.flight_id)
+                const flightInfoQuery = `SELECT * FROM flights WHERE id = ?`;
+                const flightInfo = await query(flightInfoQuery, [booking.flight_id]);
+                booking.flightinfo = flightInfo[0];
+                return booking;
+            })
+        );
+        console.log(bookedFlightsWithInfo.flightInfo)
+        res.json({ message: 'Available booked flights', booked_flights: bookedFlightsWithInfo });
+    } catch (error) {
+        res.status(400).json({ message: `${error}` });
+    }
+});
+
 
 router.get('/dashboard/check-available-flights/:id/:passenger_count', ensureLoggedin, (req, res) => {
     const flightId = req.params.id;
@@ -318,115 +391,6 @@ router.get('/dashboard/check-available-flights/:id/:passenger_count', ensureLogg
         return res.status(400).json({ message: `${error}` });
     }
 });
-
-// router.post('/dashboard/book-flight', ensureLoggedin, (req, res) => {
-//     const {
-//         flightId,
-//         userid,
-//         useremail,
-//         userfirstname,
-//         userlastname,
-//         basePrice,
-//         computedAmount,
-//         passenger_count,
-//         flight_class,
-//         flight_note,
-//         paymentReference,
-//         paymentMessage,
-//         availableSeats
-//     } = req.body;
-
-//     if (!flightId) {
-//         return res.status(400).json({ message: 'Invalide Flight ID pls, check your network!' });
-//     }
-
-//     try {
-//         // select seats to confirm no's
-//         const get_available_seats = `SELECT available_seats, last_assigned_seats FROM flights WHERE id = ?`;
-//         connection.query(get_available_seats, [flightId], (err, result) => {
-//             if (err) {
-//                 return res.status(400).json({ message: `wat 1 ?${err}`, seats: 'null' });
-//             } else if (result.length === 0) {
-//                 res.status(400).json({ message: 'Available seats not found', seats: 'null' });
-//             } else {
-//                 const available_seats = parseInt(result[0]["available_seats"]);
-//                 const last_seats_db = parseInt(result[0]["last_assigned_seats"]);
-//                 // redundant checking 😒😊
-//                 if (available_seats === 0 || available_seats !== availableSeats || (available_seats - passenger_count) < 0) {
-//                     return res.status(422).json({
-//                         message: `${!(available_seats === 0) ?
-//                             available_seats : 'No'} Available seats for booking, ${(available_seats - passenger_count) < 0 ?
-//                                 'Try booking for less persons please.' : ''}`, seats: 'null'
-//                     });
-//                     // redundant checking 😒😊 end
-//                 } else {
-//                     const seatsArr = [];
-//                     const new_available_seats = available_seats - passenger_count;
-//                     for (let i = 1; i <= passenger_count; i++) {
-//                         seatsArr.push(last_seats_db + i);
-//                     }
-//                     const update_seats = `UPDATE flights SET available_seats = ?, last_assigned_seats = ? WHERE id = ?`;
-//                     connection.query(update_seats, [new_available_seats, seatsArr[seatsArr.length - 1], flightId], (err, result) => {
-//                         if (err) {
-//                             return res.status(400).json({ message: `wat 2 ? ${err}` });
-//                         } else {
-//                             if (result.affectedRows === 0) {
-//                                 return res.status(500).json({ message: `Invalide seats UPDATE ${err}` });
-//                             } else {
-//                                 // store registered info to db
-//                                 console.log(
-//                                     `flightId: ${flightId},
-//                                     userid: ${userid},
-//                                     useremail: ${useremail},
-//                                     userfirstname: ${userfirstname},
-//                                     userlastname: ${userlastname},
-//                                     basePrice: ${basePrice},
-//                                     computedAmount: ${computedAmount},
-//                                     passenger_count: ${passenger_count},
-//                                     flight_class: ${flight_class},
-//                                     flight_note: ${flight_note},
-//                                     paymentReference: ${paymentReference},
-//                                     paymentMessage: ${paymentMessage},
-//                                     availableSeats}: ${availableSeats},`
-//                                 )
-//                                 const book_the_booking = `INSERT INTO booking (flight_id, 
-//                                     user_id,
-//                                     passenger_count, 
-//                                     seat_numbers, 
-//                                     booking_status, 
-//                                     paid_price, 
-//                                     pending_payment, 
-//                                     booking_reference, 
-//                                     booking_notes, 
-//                                     booked_class) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-//                                 connection.query(book_the_booking, [flightId,
-//                                     userid,
-//                                     passenger_count,
-//                                     seatsArr,
-//                                     ("Booked"),
-//                                     (computedAmount * 100),
-//                                     (false),
-//                                     paymentReference,
-//                                     ([flight_note, paymentMessage]),
-//                                     flight_class], (err, result) => {
-//                                         if (err) {
-//                                             return res.status(500).json({ message: `what error ${err}` });
-//                                         } else {
-//                                             return res.json({ message: `Flight Successfully Booked.` });
-//                                         }
-//                                     });
-//                             }
-//                         }
-//                     });
-//                 }
-//             }
-//         });
-//     } catch (error) {
-//         return res.status(400).json({ message: `wat 3 ? ${error}` });
-//     }
-// });
-
-// ///////////////////////admin strategy///////////////////////////////////////////////////////////////////
 
 router.post('/dashboard/book-flight', ensureLoggedin, (req, res) => {
     const {
@@ -617,9 +581,9 @@ router.get('/admin/dashboard', ensureAdminAuthenticated, (req, res) => {
     styles.includeIndexCSS = false;
     styles.includeContactCSS = false;
     styles.includeFlightBookCSS = false;
-    styles.includeSignInCSS = true;
+    styles.includeSignInCSS = false;
     styles.includeSignUpCSS = false;
-    styles.includeAdminCSS = false;
+    styles.includeAdminCSS = true;
     styles.includeDashboardCSS = false;
 
     try {
@@ -649,6 +613,41 @@ router.get('/admin/dashboard', ensureAdminAuthenticated, (req, res) => {
     } catch (error) {
         req.flash('error', `${error}`);
         res.redirect('/api/admin/dashboard');
+    }
+});
+
+router.get('/admin/dashboard/get-all-booked-flights', ensureAdminAuthenticated, (req, res) => {
+    let arr = [];
+    try {
+        // get all booked flights then get all users for the booked flcights
+        const get_all_booked_flights = `SELECT * FROM booking ORDER BY booking_id DESC`;
+        connection.query(get_all_booked_flights, (err, result) => {
+            if (err) {
+                return res.status(400).json({ message: `${err}` });
+            } else {
+                // console.log(result);
+                res.json({ message: 'All Available booked flights', booked_flights: result });
+            }
+        });
+    } catch (error) {
+        return res.status(400).json({ message: `${error}` });
+    }
+});
+
+router.get('/admin/dashboard/get-all-unbooked-flights', ensureAdminAuthenticated, (req, res) => {
+    try {
+        // get all booked flights then get all users for the booked flcights
+        const get_all_booked_flights = `SELECT * FROM booking ORDER BY booking_id DESC`;
+        connection.query(get_all_booked_flights, (err, result) => {
+            if (err) {
+                return res.status(400).json({ message: `${err}` });
+            } else {
+                // console.log(result);
+                res.json({ message: 'All Available booked flights', booked_flights: result });
+            }
+        });
+    } catch (error) {
+        return res.status(400).json({ message: `${error}` });
     }
 });
 

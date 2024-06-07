@@ -23,34 +23,88 @@
           <h6 class="heading1" style="display: block; text-align: center;">Search for available flights.</h6>
           <div class="flightDestination">
             <div>
-              <input type="text" name="flight_name" placeholder="flight name">
-            </div>
-
-            <div>
-              <input type="text" name="depart_from" placeholder="departure from">
-            </div>
-
-            <div>
-              <input type="text" name="arrive_at" placeholder="arrive at">
-            </div>
-
-            <div>
-              <input type="datetime-local" name="takeoff_time" placeholder="pick takeoff time">
-            </div>
-
-            <div>
-              <input type="datetime-local" name="landing_time" placeholder="pick landing time">
+              <input type="text" id="inputsFieldOne" name="depart_from" placeholder="departure from">
+              <span id="err_one" style="color: red; display:block; width:100%; text-align:center;"></span>
             </div>
             <div>
-              <button class="search_flights">Search</button>
+              <input type="text" id="inputsFieldTwo" name="arrive_at" placeholder="arrive at">
+              <span id="err_two"></span>
+            </div>
+            <div>
+              <button id="searcher" class="search_flights">Search</button>
             </div>
           </div>
         </div>
         <!-- display search results -->
         <div class="search_results">
+          <section class="available_flights">
+            <!-- ///////////////////////////////////////////// -->
+            <% if(availableFlights !="" ) { %>
+              <% availableFlights.forEach((item)=> { %>
+                <div class="<%= (item.last_assigned_seats !== 0) ? 'parentWrapper flight_booked' : 'parentWrapper' %>"
+                  data-flightld="<%= item.id? item.id : 0 %>" data-price="<%= item.price %>"
+                  data-availableseats="<%= item.available_seats %>">
+                  <div>
+                    <span style="margin-bottom: .5rem;">
+                      <%- item.flight_name %>
+                    </span>
+                    <span>
+                      Availabele Seats: <%- item.available_seats %>
+                    </span>
+                  </div>
+                  <div>
+                    <span data-depfrm="<%= item.depart_from %>">
+                      <%- item.depart_from %>
+                    </span>
+                  </div>
+                  <div>
+                    <span data-arvat="<%= item.arrive_at %>">
+                      <%- item.arrive_at %>
+                    </span>
+                  </div>
+                  <div>
+                    <span>
+                      <%- item.takeoff_time %>
+                    </span>
+                  </div>
+                  <div>
+                    <span>
+                      <%- item.landing_time %>
+                    </span>
+                  </div>
+                  <div>
+                    <span style="margin-bottom: .5rem;">
+                      First Class:
+                      ₦<span>
+                        <%- item.price * 3 %>
+                      </span>
+                    </span>
+                    <span style="margin-bottom: .5rem;">
+                      Economy:
+                      ₦<span>
+                        <%- item.price * 2 %>
+                      </span>
+                    </span>
+                    <span>
+                      Business:
+                      ₦<span>
+                        <%- item.price %>
+                      </span>
+                    </span>
+                  </div>
+
+                  <button class="delete-btn" style="<%= false ? 'color: white; font-size: 2rem; font-weight:bolder; background: red;' : 
+                            'color: white; font-size: 2rem; font-weight:bolder; background: green;' %>">
+                    Book Flight
+                  </button>
+                </div>
+                <% }); %>
+                  <% } %>
+                    <!-- ///////////////////////////////////////////// -->
+          </section>
         </div>
         <!-- pls do not put any element after script tag 😂 -->
-        <script src="../asset/js/index.js"></script>
+        <script src="/js/general.js"></script>
   </body>
 
 </html>

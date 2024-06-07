@@ -4,6 +4,11 @@
     box-sizing: border-box;
     font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
 }
+
+body {
+    position: relative;
+}
+
 .mainContainer {
     /* background:rgba(0, 0, 0, 0.905); */
     width: 100%;
@@ -58,7 +63,8 @@ a:hover {
 /* bookflight styling */
 
 .subContainer,
-.available_flights {
+.available_flights,
+.bookedFlights {
     width: 100%;
     height: fit-content;
     margin: 1rem auto 0 0;
@@ -80,7 +86,8 @@ a:hover {
 }
 
 .subContainer .parentWrapper,
-.available_flights .parentWrapper {
+.available_flights .parentWrapper,
+.bookedFlights .parentWrapper {
     width: 100%;
     height: fit-content;
     margin: auto;
@@ -95,6 +102,7 @@ a:hover {
 }
 
 .subContainer .parentWrapper > *,
+.bookedFlights .parentWrapper > *,
 .available_flights .parentWrapper > * {
     display: block;
     width: calc((100% / 5) - 0.2rem);
@@ -104,12 +112,14 @@ a:hover {
     border-radius: 0.2rem;
 }
 
+.bookedFlights .parentWrapper > *,
 .available_flights .parentWrapper > * {
     margin: 0.2rem auto;
 }
 
 .subContainer .parentWrapper div > input,
 .subContainer .parentWrapper div > select,
+.bookedFlights .parentWrapper div > span,
 .available_flights .parentWrapper div > span {
     display: block;
     width: 100%;
@@ -118,9 +128,39 @@ a:hover {
     padding: 0.5rem;
 }
 
+.bookedFlights .parentWrapper div > span,
 .available_flights .parentWrapper div > span {
     background-color: rgba(146, 170, 233, 0.493);
     color: white !important;
+}
+
+.bookedFlights {
+    position: absolute;
+    top: 0;
+    left: 0;
+    min-height: 100%;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.532);
+    z-index: 60 !important;
+    display: none;
+}
+
+.bookedFlights > button {
+    position: fixed;
+    top: 5%;
+    left: auto;
+    right: 2%;
+    display: block;
+    width: fit-content;
+    height: fit-content;
+    border: 2px solid white;
+    padding: 1rem;
+    border-radius: 15px;
+    background: blue;
+    z-index: 60;
+    font-size: larger;
+    font-weight: bolder;
+    color: white;
 }
 
 .heading1 {
@@ -348,6 +388,9 @@ h2 {
     color: rgba(0, 0, 0, 0.2);
 }
 
+.adminPanelButtons {
+}
+
 .success_error_modele {
     position: absolute;
     width: 100%;
@@ -389,9 +432,26 @@ h2 {
     display: flex;
 }
 
+.addGreen {
+    background: green !important;
+}
+
+.addGreenInner > * {
+    background: green !important;
+}
+
+.addWhite {
+    background: white !important;
+}
+
 .active {
-    display: flex;
     transition: all 300ms ease-in-out !important;
+    display: flex;
+}
+
+.activeBlock {
+    transition: all 300ms ease-in-out !important;
+    display: block;
 }
 
 .notActive {

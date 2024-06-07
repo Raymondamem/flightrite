@@ -14,7 +14,7 @@ body{
     /* background:rgba(0, 0, 0, 0.905); */
     width: 90%;
     margin: auto; 
-    height:700px;
+    height:fit-content;
     overflow: hidden;
     position: relative;
 
