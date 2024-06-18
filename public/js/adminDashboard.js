@@ -1,4 +1,3 @@
-document.querySelector('.available_flights').addEventListener('click', deleteFlight_bookFlight);
 const booking_model = document.querySelector('.booking_modele');
 const booking_modele_paystack = document.querySelector('.booking_modele_paystack');
 const booking_model_btn = document.querySelector('.booking_modele > .booking_btn');
@@ -15,34 +14,9 @@ let data = null;
 let domArr = []
 let isAdminCheck = false;
 
-// {
-//   0:
-// booked_class:"A"
-// booking_date:"2024-05-29T09:31:45.000Z"
-// booking_id:11
-// booking_notes:"[\"will of time\",\"Approved\"]"
-// booking_reference:"469728137"
-// booking_status:"Booked"
-// flight_id:6
-// flightinfo:
-// arrive_at:"Jos"
-// available_seats:2
-// depart_from:"Benue"
-// flight_name:"C34534"
-// id:6
-// landing_time:"2024-05-19T13:16:00.000Z"
-// last_assigned_seats:7
-// no_seats:9
-// price:1000
-// takeoff_time:"2024-05-29T09:31:45.000Z"
-// [[Prototype]]:Object
-// paid_price:"300000.00"
-// passenger_count:1
-// pending_payment:0
-// seat_numbers:"[7]"
-// user_id:3
-// }
-// see booked flights for perticuler person
+document.querySelector('.available_flights').addEventListener('click', deleteFlight_bookFlight);
+document.querySelector('.inner_booked_wrapper').addEventListener('click', deleteFlight_bookFlight);
+
 document.querySelector('#seeBookedFlightsBtn').addEventListener('click', async function (e) {
   const userid = e.target.dataset.userid;
 
@@ -59,9 +33,9 @@ document.querySelector('#seeBookedFlightsBtn').addEventListener('click', async f
   console.log(data.booked_flights);
   // //////////////
   data.booked_flights.forEach(flightsBooked => {
-    domArr.push(computed_booked_flights(flightsBooked, isAdminCheck ? true : false));
+    domArr.push(computed_booked_flights(flightsBooked, isAdminCheck ? true : false, true));
   })
-  // display it
+  // display it 
   inner_booked_wrapper_El.innerHTML = domArr;
   data = null;
   domArr = [];
@@ -89,6 +63,7 @@ document.querySelector('#bookedFlightsId > button').addEventListener('click', fu
 });
 
 async function deleteFlight_bookFlight(e) {
+  console.log(433)
   if (e.target.classList.contains('delete-btn') && e.target.dataset.ischeck === 'admin') {
     // delete flight by admin
     const flightId = e.target.parentElement.dataset.flightld;
@@ -130,7 +105,8 @@ async function storeUserSuccessPaymentToDB(userObj) {
 
   const data = await response.json();
   alert(data.message);
-  location.reload();
+  location.replace('/api/dashboard/');
+  // window.location.href = '/api/dashboard/';
 }
 
 booking_model_btn.addEventListener("click", async function () {
@@ -242,7 +218,7 @@ booking_cls_btn.forEach(el => {
 });
 
 // functions
-function computed_booked_flights(obj, isAdmin = false) {
+function computed_booked_flights(obj, isAdmin = false, isBooked = false) {
 
   const getDateTime = (isoString) => {
     const date = new Date(isoString);
@@ -257,49 +233,51 @@ function computed_booked_flights(obj, isAdmin = false) {
     return `${formattedDate} ${formattedTime}`;
   };
 
-  return (`
-<div class="${isAdmin ? "addGreenInner parentWrapper" : "parentWrapper"}">
-<div>
+  if (isBooked) {
+    console.log("first")
+    return (`
+  <div class="${isAdmin ? "addGreenInner parentWrapper" : "parentWrapper"}">
+  <div>
     <span style="margin-bottom: .5rem;">
         Flight Name:${obj.flightinfo.flight_name}
     </span>
     <span>
         Flight Class:${obj.booked_class}
     </span>
-</div>
-<div>
+  </div>
+  <div>
     <span style="margin-bottom: .5rem;">
         Booked Date:${getDateTime(obj.booking_date)}
     </span>
     <span>
         Booked ID:${obj.booking_reference}
     </span>
-</div>
-<div>
+  </div>
+  <div>
     <span style="margin-bottom: .5rem;">
         Booked Amount:${obj.paid_price}
     </span>
     <span>
         Booked persons:${obj.passenger_count}
     </span>
-</div>
-<div>
+  </div>
+  <div>
     <span style="margin-bottom: .5rem;">
         Seats-NO(s):${obj.seat_numbers}
     </span>
     <span>
         Seats-NO(s):${obj.seat_numbers}
     </span>
-</div>
-<div>
+  </div>
+  <div>
     <span style="margin-bottom: .5rem;">
         depart.from:${obj.flightinfo.depart_from}
     </span>
     <span>
         arrive.at:${obj.flightinfo.arrive_at}
     </span>
-</div>
-<div>
+  </div>
+  <div>
     <span style="margin-bottom: .5rem;">
         Takeoff time:
         <span>
@@ -318,6 +296,84 @@ function computed_booked_flights(obj, isAdmin = false) {
         ${obj.flightinfo.no_seats}
         </span>
     </span>
+  </div>
+  </div>`);
+  } else {
+    console.log("second")
+    return (`
+    <div class="parentWrapper"
+    data-flightld="${obj.id}" data-price="${obj.price}"
+    data-availableseats="${obj.available_seats}">
+    <div>
+        <span style="margin-bottom: .5rem;">
+            ${obj.flight_name}
+        </span>
+        <span>
+            labele Seats:${obj.available_seats}
+        </span>
+    </div>
+    <div>
+        <span>
+            ${obj.depart_from}
+        </span>
+    </div>
+    <div>
+        <span>
+            ${obj.arrive_at}
+        </span>
+    </div>
+    <div>
+        <span>
+            ${obj.takeoff_time}
+        </span>
+    </div>
+    <div>
+        <span>
+            ${obj.landing_time}
+        </span>
+    </div>
+    <div>
+        <span style="margin-bottom: .5rem;">
+            First Class:
+            ₦<span>
+                ${obj.price * 3}
+            </span>
+        </span>
+        <span style="margin-bottom: .5rem;">
+            Economy:
+            ₦<span>
+                ${obj.price * 2}
+            </span>
+        </span>
+        <span>
+            Business:
+            ₦<span>
+                ${obj.price}
+            </span>
+        </span>
+    </div>
+    <button class="delete-btn" style="color: white; font-size: 2rem; font-weight:bolder; background: red;"
+        data-ischeck="admin">
+        Delete Flight
+    </button>
 </div>
-</div>`);
+    `)
+  }
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+  const urlParams = new URLSearchParams(window.location.search);
+  let flightId = urlParams.get('flightId');
+  let price = urlParams.get('price');
+  console.log(flightId, price);
+
+  if (flightId && price) {
+    bookingCretarials.flightId = flightId
+    bookingCretarials.userid = booking_model.dataset.userid;
+    bookingCretarials.useremail = booking_model.dataset.useremail;
+    bookingCretarials.userfirstname = booking_model.dataset.userfirstname;
+    bookingCretarials.userlastname = booking_model.dataset.userlastname;
+    bookingCretarials.basePrice = price;
+    booking_model.classList.add('active');
+  }
+});

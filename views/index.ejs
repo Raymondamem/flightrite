@@ -30,18 +30,16 @@
               <input type="text" id="inputsFieldTwo" name="arrive_at" placeholder="arrive at">
               <span id="err_two"></span>
             </div>
-            <div>
-              <button id="searcher" class="search_flights">Search</button>
-            </div>
           </div>
         </div>
         <!-- display search results -->
         <div class="search_results">
-          <section class="available_flights">
+          <section id="available_flights" class="available_flights">
             <!-- ///////////////////////////////////////////// -->
             <% if(availableFlights !="" ) { %>
               <% availableFlights.forEach((item)=> { %>
-                <div class="<%= (item.last_assigned_seats !== 0) ? 'parentWrapper flight_booked' : 'parentWrapper' %>"
+                <div role="link" href="<%= '/dashboard/get-booked-flights/item.id' %>"
+                  class="<%= (item.last_assigned_seats !== 0) ? 'parentWrapper flight_booked' : 'parentWrapper' %>"
                   data-flightld="<%= item.id? item.id : 0 %>" data-price="<%= item.price %>"
                   data-availableseats="<%= item.available_seats %>">
                   <div>
@@ -93,7 +91,7 @@
                     </span>
                   </div>
 
-                  <button class="delete-btn" style="<%= false ? 'color: white; font-size: 2rem; font-weight:bolder; background: red;' : 
+                  <button class="delete-btn" style="font-size: 1rem; <%= false ? 'color: white; font-size: 2rem; font-weight:bolder; background: red;' : 
                             'color: white; font-size: 2rem; font-weight:bolder; background: green;' %>">
                     Book Flight
                   </button>

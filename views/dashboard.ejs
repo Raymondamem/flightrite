@@ -154,7 +154,10 @@
         </div>
 
         <!-- user booking modele -->
-        <div class="<%= isAdmin? 'notActive' : 'booking_modele' %>">
+        <div class="<%= isAdmin? 'notActive' : 'booking_modele' %>" data-userid="<%= user.userid? user.userid : 0 %>"
+            data-useremail="<%= user.useremail %>" data-userfirstname="<%= user.userfirst_name %>"
+            data-userlastname="<%= user.userlast_name %>">
+            
             <button class="booking_cls_btn">Close</button>
             <button class="booking_btn">next</button>
             <h2>Booking cretarials</h2>
@@ -220,10 +223,13 @@
         </div>
 
         <div id="bookedFlightsId" class="<%= isAdmin? 'bookedFlights addWhite' : 'bookedFlights' %>">
-            <button class="<%= isAdmin? 'addGreen' : '' %>">X</button>
+            <button type="button" class="<%= isAdmin? 'addGreen' : '' %>">X</button>
             <div class="inner_booked_wrapper">
             </div>
         </div>
+        <!-- Include this script in the dashboard page -->
+        <script>
+        </script>
         <script src="https://js.paystack.co/v1/inline.js"></script>
         <script src="/js/adminDashboard.js" type="module"></script>
     </body>

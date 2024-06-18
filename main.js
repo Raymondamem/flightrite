@@ -34,4 +34,4 @@ app.use(passport.session());
 app.use('/api', authRoute);
 
 const port = process.env.PORT || 4000;
-app.listen(port, () => console.log(`Server started, http://localhost:${port}/api`));
+app.listen(port, () => console.log(`Server started, http://localhost:${port}/api `));

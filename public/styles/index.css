@@ -91,8 +91,9 @@ a:hover {
 }
 
 .flightDestination > div {
-    width: calc(100% / 3);
-    border-left: 1px solid black;
+    width: calc(100% / 2);
+    border: none;
+    border-radius: 25px !important;
 }
 
 .flightDestination > div > input,

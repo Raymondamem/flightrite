@@ -345,20 +345,19 @@ router.get('/dashboard/get-booked-flights/:id', ensureLoggedin, async (req, res)
 
         const bookedFlightsWithInfo = await Promise.all(
             bookedFlights.map(async (booking) => {
-                console.log(booking.flight_id)
+                // console.log(booking.flight_id)
                 const flightInfoQuery = `SELECT * FROM flights WHERE id = ?`;
                 const flightInfo = await query(flightInfoQuery, [booking.flight_id]);
                 booking.flightinfo = flightInfo[0];
                 return booking;
             })
         );
-        console.log(bookedFlightsWithInfo.flightInfo)
+        // console.log(bookedFlightsWithInfo.flightInfo)
         res.json({ message: 'Available booked flights', booked_flights: bookedFlightsWithInfo });
     } catch (error) {
         res.status(400).json({ message: `${error}` });
     }
 });
-
 
 router.get('/dashboard/check-available-flights/:id/:passenger_count', ensureLoggedin, (req, res) => {
     const flightId = req.params.id;
@@ -616,17 +615,67 @@ router.get('/admin/dashboard', ensureAdminAuthenticated, (req, res) => {
     }
 });
 
-router.get('/admin/dashboard/get-all-booked-flights', ensureAdminAuthenticated, (req, res) => {
-    let arr = [];
+// router.get('/admin/dashboard/get-all-booked-flights', ensureAdminAuthenticated, (req, res) => {
+//     let arr = [];
+//     try {
+//         // get all booked flights then get all users for the booked flcights
+//         const get_all_booked_flights = `SELECT * FROM booking ORDER BY booking_id DESC`;
+//         connection.query(get_all_booked_flights, (err, result) => {
+//             if (err) {
+//                 return res.status(400).json({ message: `${err}` });
+//             } else {
+//                 // console.log(result);
+//                 res.json({ message: 'All Available booked flights', booked_flights: result });
+//             }
+//         });
+//     } catch (error) {
+//         return res.status(400).json({ message: `${error}` });
+//     }
+// });
+
+const query2 = util.promisify(connection.query).bind(connection);
+
+router.get('/admin/dashboard/get-all-booked-flights', ensureAdminAuthenticated, async (req, res) => {
+    try {
+        // Get all booked flights
+        const get_all_booked_flights = `SELECT * FROM booking ORDER BY booking_id DESC`;
+        const bookedFlights = await query2(get_all_booked_flights);
+
+        // Fetch flight info for each booked flight
+        const bookedFlightsWithInfo = await Promise.all(
+            bookedFlights.map(async (booking) => {
+                const flightInfoQuery2 = `SELECT * FROM flights WHERE id = ?`;
+                const flightInfo = await query2(flightInfoQuery2, [booking.flight_id]);
+
+                if (flightInfo.length > 0) {
+                    booking.flightinfo = flightInfo[0];
+                } else {
+                    booking.flightinfo = null; // No flight info found
+                }
+
+                return booking;
+            })
+        );
+
+        // Send response with all booked flights and their corresponding flight info
+        res.json({ message: 'All Available booked flights', booked_flights: bookedFlightsWithInfo });
+    } catch (error) {
+        // Log and send error response
+        // console.error(`Error fetching booked flights: ${error.message}`);
+        res.status(400).json({ message: `Error fetching booked flights: ${error.message}` });
+    }
+});
+
+router.get('/admin/dashboard/get-all-unbooked-flights', ensureAdminAuthenticated, (req, res) => {
     try {
         // get all booked flights then get all users for the booked flcights
-        const get_all_booked_flights = `SELECT * FROM booking ORDER BY booking_id DESC`;
-        connection.query(get_all_booked_flights, (err, result) => {
+        const get_all_booked_flights = `SELECT * FROM flights WHERE last_assigned_seats = ?`;
+        connection.query(get_all_booked_flights, [0], (err, result) => {
             if (err) {
                 return res.status(400).json({ message: `${err}` });
             } else {
-                // console.log(result);
-                res.json({ message: 'All Available booked flights', booked_flights: result });
+                console.log(result[0]);
+                res.json({ message: 'All Available unbooked flights', booked_flights: result });
             }
         });
     } catch (error) {
@@ -634,21 +683,16 @@ router.get('/admin/dashboard/get-all-booked-flights', ensureAdminAuthenticated, 
     }
 });
 
-router.get('/admin/dashboard/get-all-unbooked-flights', ensureAdminAuthenticated, (req, res) => {
-    try {
-        // get all booked flights then get all users for the booked flcights
-        const get_all_booked_flights = `SELECT * FROM booking ORDER BY booking_id DESC`;
-        connection.query(get_all_booked_flights, (err, result) => {
-            if (err) {
-                return res.status(400).json({ message: `${err}` });
-            } else {
-                // console.log(result);
-                res.json({ message: 'All Available booked flights', booked_flights: result });
-            }
-        });
-    } catch (error) {
-        return res.status(400).json({ message: `${error}` });
-    }
+router.get('/admin/all-registered-users', (req, res) => {
+    res.json({ message: 'All users info', users: [1, 2, 3, 5, 4, 7, 6, 9, 8, 0] });
+});
+
+router.get('/admin/all-registered-users-that-booked-flight', (req, res) => {
+    res.json({ message: 'All users info', users: [1, 2, 3, 5, 4, 7, 6, 9, 8, 0] });
+});
+
+router.get('/admin/all-registered-users-that-did-not-booked-flight', (req, res) => {
+    res.json({ message: 'All users info', users: [1, 2, 3, 5, 4, 7, 6, 9, 8, 0] });
 });
 
 router.post('/admin/add-flights', ensureAdminAuthenticated, (req, res) => {
